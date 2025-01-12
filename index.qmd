@@ -10,6 +10,7 @@ format:
 theme: superhero 
 ---
 ```{python}
+# Imports
 import pandas as pd
 import plotly.express as px
 import matplotlib.pyplot as plt
@@ -180,40 +181,28 @@ fig_tpr = px.line(
 fig_tpr.show()
 ```
 ## Row 3 {height=10%}
-Obi LGA is the chief driver of malaria cases in Benue, contributing over 54,000 cases annually. Malaria cases peaks in JUly and plateaus down to December.
+Obi LGA is the chief driver of malaria cases in Benue, contributing over 54,000 cases annually. Malaria cases peaks in July and plateaus down to December.
 
 # RAINFALL
-## Row 1 {height=30%}
+## Row 1 {height=35%}
 
-::: {.valuebox icon="heart" color="#1E90FF" title="Q1 Rainfall"}
-
+::: {.valuebox icon="heart" color="#1E90FF" title="Q1 Rainfall" icon="clound-rain"}
 `{python} str(q1_rain)`
-
-Q1 rainfall
 :::
 
 ::: {.valuebox icon="thermometer" color="#87CEFA" title="Q2 Rainfall"} 
-
-`{python} str(q2_rain)`
-
-Q2 rainfall
+`{python} str("{:,}".format(q2_rain))`
 :::
 
 ::: {.valuebox icon="graph-up" color="#4682B4" title="Q3 Rainfall"}
-
 `{python} str("{:,}".format(q3_rain))`
-
-Q3 rainfall
 :::
 
 ::: {.valuebox icon="graph-up" color="#4682B4" title="Q4 Rainfall"}
-
 `{python} str("{:,}".format(q4_rain))`
-
-Q4 rainfall
 :::
 
-## Row 2 {height=65%}
+## Row 2 {height=60%}
 
 ```{python}
 # Create the rainfall trend object
@@ -228,10 +217,11 @@ fig_rain
 ```
 
 ## Row 3 {height=5%}
+The rainfall season picks up from early second quarter of the year, peaks in the third quarter and closes in the final quarter of the year. 
 
 # RELATIONSHIP
 
-## Row 1 {.tabset} 
+## Row 1 {.tabset height="85%"} 
 
 ### Malaria cases vs Rainfall
 ```{python}
@@ -317,7 +307,9 @@ fig2 = fig2.update_layout(
     title="Test positivity rate vs Rainfall",
     xaxis=dict(title="Month"),
     yaxis=dict(
-        title="Test positivity rate", titlefont=dict(color="red"), tickfont=dict(color="red")
+        title="Test positivity rate",
+        titlefont=dict(color="red"),
+        tickfont=dict(color="red"),
     ),
     yaxis2=dict(
         title="Rainfall (mm)",
@@ -332,6 +324,9 @@ fig2 = fig2.update_layout(
 fig2
 
 ```
+## Row 2 {height="15%"}
+For both malaria cases and test positivity rates, it can be seen that there is an alignment with the rainfall pattern as the peak of malaria transmission coincides with the peak of raining season which is quarter three.
+
 # DATA DOWNLOAD
 
 ```{python}
@@ -347,4 +342,4 @@ itables.show(
 
 This data is sourced from the Nigeria routine Health Management Information System. It covers malaria cases and rainfall data.
 
-The Dashboard seeks to demonstrates that malaria transmission follows a similar pattern as rainfall.
+The Dashboard seeks to demonstrate that malaria transmission follows a similar pattern as rainfall.
