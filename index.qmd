@@ -1,12 +1,13 @@
 ---
-title: "BENUE MALARIA | TRANSMISSION TREND WITH RAINFALL PATTERNS" 
+title: "BENUE MALARIA, 2023 | TRANSMISSION TREND WITH RAINFALL PATTERNS" 
 author: "Dagba Emmanuel Erkwagh"
 execute:
   echo: false
 format: 
   dashboard:
     logo: images/mosquito.jpeg
-    nav-buttons: [linkedin, twitter, github]   
+    nav-buttons: [linkedin, twitter, github]  
+theme: superhero 
 ---
 ```{python}
 import pandas as pd
@@ -33,15 +34,6 @@ benue_rainfall_data["Period"] = benue_rainfall_data["Period"] = pd.to_datetime(
 # Convert the malaria data date field to a timeseries format
 cases["Period"] = cases["Period"] = pd.to_datetime(cases["Period"], format="%m/%d/%Y")
 
-
-# Create the rainfall trend object
-fig_rain = px.line(
-    benue_rainfall_data,
-    x="Period",
-    y="Rainfall average (mm)",  # Example: plotting value1
-    title="Rain pattern",
-    labels={"value1": "Value 1 (Sum)", "region": "Region"},
-)
 
 # Subset the malaria cases to Benue and period, 2023
 selected_state = "Benue"
@@ -113,21 +105,21 @@ cases_rainfall = pd.merge(filtered_cases, benue_rainfall_data, on=["State", "Per
 
 ## Row 1 {height=30%}
 
-::: {.valuebox icon="heart" color="#1E90FF" title="2023 malaria Cases" icon="malaria"}
+::: {.valuebox icon="heart" color="#1E90FF" title="Malaria Cases" icon="malaria"}
 
-`{python} str(total_cases)`
+`{python} str("{:,}".format(total_cases))`
 
-Annual cases
+
 :::
 
-::: {.valuebox icon="thermometer" color="#87CEFA" title="2023 malaria incidence/ 1000 population"} 
+::: {.valuebox icon="thermometer" color="#87CEFA" title="Incidence per 1000 population"} 
 
 `{python} str(incidence)`
 
 Annual incidence
 :::
 
-::: {.valuebox icon="graph-up" color="#4682B4" title="2023 Avg malaria test positivity rate"}
+::: {.valuebox icon="graph-up" color="#4682B4" title="Malaria test positivity rate (%)"}
 
 `{python} str(tpr)`
 
@@ -145,7 +137,7 @@ fig_cases = px.line(
     x="Period",
     y="total_cases",  # Example: plotting value1
     title="Malaria cases trend",
-    labels={"value1": "Value 1 (Sum)", "region": "Region"}
+    labels={"total_cases": "malaria cases"}
 )
 fig_cases.show()
 ```
@@ -161,8 +153,8 @@ fig_cases_lga = px.bar(
     cases_LGA_sorted,
     x="total_cases",
     y="LGA",
-    title="Total Malaria Cases by LGA",
-    labels={"total_cases": "Total Cases", "LGA": "Local Government Area (LGA)"},
+    title="Malaria cases by LGA",
+    labels={"total_cases": "Total Cases", "LGA": "Local Government Area"},
     orientation="h",  # Horizontal bar chart
 )
 
@@ -188,50 +180,67 @@ fig_tpr = px.line(
 fig_tpr.show()
 ```
 ## Row 3 {height=10%}
-Obi LGA is the chief driver of malaria cases in Benue, contributing over 54,000 cases annually.
+Obi LGA is the chief driver of malaria cases in Benue, contributing over 54,000 cases annually. Malaria cases peaks in JUly and plateaus down to December.
 
 # RAINFALL
-
 ## Row 1 {height=30%}
 
-::: {.valuebox icon="heart" color="#1E90FF" title="2023-Q1 Avg Rainfall"}
+::: {.valuebox icon="heart" color="#1E90FF" title="Q1 Rainfall"}
 
 `{python} str(q1_rain)`
 
 Q1 rainfall
 :::
 
-::: {.valuebox icon="thermometer" color="#87CEFA" title="2023-Q2 Avg Rainfall"} 
+::: {.valuebox icon="thermometer" color="#87CEFA" title="Q2 Rainfall"} 
 
 `{python} str(q2_rain)`
 
 Q2 rainfall
 :::
 
-::: {.valuebox icon="graph-up" color="#4682B4" title="2023-Q3 Avg Rainfall"}
+::: {.valuebox icon="graph-up" color="#4682B4" title="Q3 Rainfall"}
 
-`{python} str(q3_rain)`
+`{python} str("{:,}".format(q3_rain))`
 
 Q3 rainfall
 :::
 
-::: {.valuebox icon="graph-up" color="#4682B4" title="2023-Q4 Avg Rainfall"}
+::: {.valuebox icon="graph-up" color="#4682B4" title="Q4 Rainfall"}
 
-`{python} str(q4_rain)`
+`{python} str("{:,}".format(q4_rain))`
 
 Q4 rainfall
 :::
 
-## Row 2 {height=70%}
+## Row 2 {height=65%}
+
+```{python}
+# Create the rainfall trend object
+fig_rain = px.line(
+    benue_rainfall_data,
+    x="Period",
+    y="Rainfall average (mm)",  # Example: plotting value1
+    title="Rain pattern",
+    labels={"value1": "Value 1 (Sum)", "region": "Region"},
+)
+fig_rain
+```
+
+## Row 3 {height=5%}
+
+# RELATIONSHIP
+
+## Row 1 {.tabset} 
 
 ### Malaria cases vs Rainfall
 ```{python}
 # Dualized plot for malaria cases and rainfall
 # Create the figure
-fig = go.Figure()
+fig1 = go.Figure()
 
 # Add the primary y-axis trace
-fig.add_trace(
+fig1 = fig1.add_trace(
     go.Scatter(
         x=cases_rainfall["Period"],
         y=cases_rainfall["total_cases"],
@@ -242,7 +251,7 @@ fig.add_trace(
 )
 
 # Add the secondary y-axis trace
-fig.add_trace(
+fig1 = fig1.add_trace(
     go.Scatter(
         x=cases_rainfall["Period"],
         y=cases_rainfall["Rainfall average (mm)"],
@@ -254,7 +263,7 @@ fig.add_trace(
 )
 
 # Update layout for dual axes
-fig.update_layout(
+fig1 = fig1.update_layout(
     title="Malaria cases vs Rainfall",
     xaxis=dict(title="Month"),
     yaxis=dict(
@@ -270,58 +279,56 @@ fig.update_layout(
     template="plotly_white",
 )
 
-fig
+fig1
 ```
 
 ### Malaria test positivity rate vs Rainfall
 
 ```{python}
+# Dualized plot for test positivity rate and rainfall
 # Create the figure
 fig2 = go.Figure()
 
-# Add bar chart for Variable 2
-fig2.add_trace(
-    go.Bar(
+# Add the primary y-axis trace
+fig2 = fig2.add_trace(
+    go.Scatter(
         x=cases_rainfall["Period"],
         y=cases_rainfall["average_tpr"],
-        name="Variable 2 (Bar Chart)",
-        marker_color="red",
-        opacity=0.6,
+        mode="lines+markers",
+        name="Variable 1",
+        line=dict(color="red"),
     )
 )
 
-# Add line chart for Variable 1
-fig2.add_trace(
+# Add the secondary y-axis trace
+fig2 = fig2.add_trace(
     go.Scatter(
         x=cases_rainfall["Period"],
         y=cases_rainfall["Rainfall average (mm)"],
         mode="lines+markers",
-        name="Variable 1 (Line Chart)",
-        line=dict(color="blue", width=2),
+        name="Variable 2",
+        line=dict(color="blue"),
+        yaxis="y2",
     )
 )
 
-# Configure the layout for dual axes
-fig2.update_layout(
-    title="Dual-Axis Plot with Bar and Line Charts",
-    xaxis=dict(title="X-axis"),
+# Update layout for dual axes
+fig2 = fig2.update_layout(
+    title="Test positivity rate vs Rainfall",
+    xaxis=dict(title="Month"),
     yaxis=dict(
-        title="Variable 2 (Bar Chart)",
-        titlefont=dict(color="red"),
-        tickfont=dict(color="red"),
+        title="Test positivity rate", titlefont=dict(color="red"), tickfont=dict(color="red")
     ),
     yaxis2=dict(
-        title="Variable 1 (Line Chart)",
+        title="Rainfall (mm)",
         titlefont=dict(color="blue"),
         tickfont=dict(color="blue"),
         overlaying="y",
         side="right",
     ),
-    legend=dict(title=None),
     template="plotly_white",
 )
 
-# Return the figure in Quarto
 fig2
 
 ```
